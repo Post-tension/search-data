@@ -1,15 +1,6 @@
 const apiKey = 'AIzaSyAaoonqQDk_uxT9gIaH0ctGzcVvwcdtSa0';
 const spreadsheetId = '1O29p24mJmX-fvEtLw3Ia1WSmh-_nVS_AdOk8Ap6hoq0';
 const range = 'Sheet1!A1:Y135';
-const selectedColumns = [6, 7, 11, 21, 12, 8, 19, 13, 17, 18, 22];
-const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"];
-
-document.getElementById('search-input').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        searchData();
-    }
-});
 
 async function fetchData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
@@ -26,14 +17,22 @@ async function fetchData() {
 
 async function searchData() {
     const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+
+    // Check if search term is empty
     if (!searchTerm) {
         displayResults(null, "Error: Kata kunci pencarian harus diisi.");
         return;
     }
+
+    // Show loading indicator
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '<p>Loading...</p>';
+
     const data = await fetchData();
-    if (!data) return;
+
+    if (!data) return; // Error already handled in fetchData
+
+    // Filter results based on search term
     const results = data.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
     displayResults(results);
 }
@@ -47,22 +46,27 @@ function displayResults(results, errorMessage = null) {
         return;
     }
 
+    const selectedColumns = [6, 7, 11, 21, 12, 8, 19, 13, 17, 18, 22];
+    const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"];
+
     if (results && results.length > 0) {
         const rowDiv = document.createElement('div');
-        rowDiv.classList.add('row', 'g-3');
+        rowDiv.classList.add('row', 'g-3'); // Bootstrap row with gap between columns
 
         results.forEach(row => {
             const colDiv = document.createElement('div');
-            colDiv.classList.add('col-12', 'col-md-6', 'col-lg-4');
+            colDiv.classList.add('col-12', 'col-md-6', 'col-lg-4'); // Full width on mobile, 2 columns on medium screens, 3 columns on large
+
             const card = document.createElement('div');
-            card.classList.add('result-card', 'card', 'h-100', 'p-3', 'shadow-sm');
+            card.classList.add('result-card', 'card', 'h-100', 'p-3', 'shadow-sm'); // Bootstrap card with full height and padding
 
             selectedColumns.forEach((colIndex, i) => {
                 const rowContent = document.createElement('p');
                 rowContent.innerHTML = `<strong>${columnLabels[i]}:</strong> `;
 
                 const value = document.createElement('span');
-                if (colIndex === 22) { 
+
+                if (colIndex === 22) { // Link column
                     const link = row[colIndex] || "";
                     if (isValidURL(link)) {
                         const anchor = document.createElement('a');
@@ -92,6 +96,8 @@ function displayResults(results, errorMessage = null) {
     }
 }
 
+
+// Function to validate if a string is a URL
 function isValidURL(string) {
     try {
         new URL(string);
