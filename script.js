@@ -1,6 +1,6 @@
 const apiKey = 'AIzaSyAaoonqQDk_uxT9gIaH0ctGzcVvwcdtSa0';
 const spreadsheetId = '2PACX-1vTkJlUGoQSS8-MeAXttwmJCF3EUE-Zay5icg5YbxbjZ6RjOqgTXu3-zA7DlOW0NxA';
-const range = 'Monitoring Kalibrasi!A1:Y1000';
+const range = 'Kalibrasi!A1:Y1000';
 
 async function fetchData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
