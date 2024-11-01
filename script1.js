@@ -10,10 +10,22 @@ async function fetchData() {
 }
 
 async function searchData() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
-    const data = await fetchData();
-    const results = data.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
+    const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
 
+    // Cek apakah search term kosong
+    if (!searchTerm) {
+        displayResults(null, "Error: Kata kunci pencarian harus diisi.");
+        return;
+    }
+
+    const data = await fetchData();
+
+    if (!data) {
+        displayResults(null, "Error fetching data. Please try again.");
+        return;
+    }
+
+    const results = data.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
     displayResults(results);
 }
 async function fetchData() {
@@ -32,7 +44,7 @@ function displayResults(results, errorMessage = null) {
     resultsDiv.innerHTML = '';
 
     if (errorMessage) {
-        resultsDiv.innerHTML = `<p>${errorMessage}</p>`;
+        resultsDiv.innerHTML = `<p style="color: red;">${errorMessage}</p>`;
         return;
     }
 
