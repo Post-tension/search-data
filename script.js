@@ -16,7 +16,17 @@ async function searchData() {
 
     displayResults(results);
 }
-
+async function fetchData() {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log("Data fetched:", data);
+        return data.values;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
 function displayResults(results) {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
