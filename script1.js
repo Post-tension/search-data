@@ -27,12 +27,28 @@ async function fetchData() {
         console.error("Error fetching data:", error);
     }
 }
-function displayResults(results) {
+function displayResults(results, errorMessage = null) {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
 
+    if (errorMessage) {
+        resultsDiv.innerHTML = `<p>${errorMessage}</p>`;
+        return;
+    }
+
     if (results.length > 0) {
         const table = document.createElement('table');
+        
+        // Header table
+        const headerRow = document.createElement('tr');
+        results[0].forEach((_, index) => {
+            const th = document.createElement('th');
+            th.textContent = `Kolom ${index + 1}`; // Nama kolom contoh, sesuaikan jika Anda tahu kolomnya
+            headerRow.appendChild(th);
+        });
+        table.appendChild(headerRow);
+
+        // Isi tabel
         results.forEach(row => {
             const tr = document.createElement('tr');
             row.forEach(cell => {
@@ -42,6 +58,7 @@ function displayResults(results) {
             });
             table.appendChild(tr);
         });
+        
         resultsDiv.appendChild(table);
     } else {
         resultsDiv.innerHTML = '<p>No results found.</p>';
