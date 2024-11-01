@@ -42,7 +42,7 @@ function displayResults(results, errorMessage = null) {
     resultsDiv.innerHTML = '';
 
     if (errorMessage) {
-        resultsDiv.innerHTML = `<p style="color: red;">${errorMessage}</p>`;
+        resultsDiv.innerHTML = `<div class="alert alert-danger" role="alert">${errorMessage}</div>`;
         return;
     }
 
@@ -50,26 +50,29 @@ function displayResults(results, errorMessage = null) {
     const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"];
 
     if (results && results.length > 0) {
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('row', 'g-3'); // Bootstrap row with gap between columns
+
         results.forEach(row => {
+            const colDiv = document.createElement('div');
+            colDiv.classList.add('col-12', 'col-md-6', 'col-lg-3'); // Full width on mobile, 6 columns on medium screens, 3 columns on large
+
             const card = document.createElement('div');
-            card.classList.add('result-card');
+            card.classList.add('result-card', 'card', 'h-100', 'p-3', 'shadow-sm'); // Bootstrap card with full height and padding
 
             selectedColumns.forEach((colIndex, i) => {
-                const label = document.createElement('p');
-                label.classList.add('result-label');
-                label.innerHTML = `${columnLabels[i]}: `;
+                const rowContent = document.createElement('p');
+                rowContent.innerHTML = `<strong>${columnLabels[i]}:</strong> `;
 
                 const value = document.createElement('span');
-                value.classList.add('result-value');
 
-                // Check if this is column 22 and if there is a URL
-                if (colIndex === 22) { 
+                if (colIndex === 22) { // Link column
                     const link = row[colIndex] || "";
                     if (isValidURL(link)) {
                         const anchor = document.createElement('a');
                         anchor.href = link;
                         anchor.target = '_blank';
-                        anchor.textContent = "Klik di sini"; // Clickable link
+                        anchor.textContent = "Klik di sini";
                         anchor.setAttribute('aria-label', `Link to ${columnLabels[i]}`);
                         value.appendChild(anchor);
                     } else {
@@ -79,16 +82,20 @@ function displayResults(results, errorMessage = null) {
                     value.textContent = row[colIndex] || "Tidak ada data";
                 }
 
-                label.appendChild(value);
-                card.appendChild(label);
+                rowContent.appendChild(value);
+                card.appendChild(rowContent);
             });
 
-            resultsDiv.appendChild(card);
+            colDiv.appendChild(card);
+            rowDiv.appendChild(colDiv);
         });
+
+        resultsDiv.appendChild(rowDiv);
     } else {
-        resultsDiv.innerHTML = '<p>Tidak ada hasil yang ditemukan.</p>';
+        resultsDiv.innerHTML = '<div class="alert alert-warning" role="alert">Tidak ada hasil yang ditemukan.</div>';
     }
 }
+
 
 // Function to validate if a string is a URL
 function isValidURL(string) {
