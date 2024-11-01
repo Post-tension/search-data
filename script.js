@@ -6,29 +6,33 @@ async function fetchData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
     try {
         const response = await fetch(url);
+        if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         return data.values;
     } catch (error) {
         console.error("Error fetching data:", error);
+        displayResults(null, "Error fetching data. Please try again.");
     }
 }
 
 async function searchData() {
     const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
 
-    // Cek apakah search term kosong
+    // Check if search term is empty
     if (!searchTerm) {
         displayResults(null, "Error: Kata kunci pencarian harus diisi.");
         return;
     }
 
+    // Show loading indicator
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '<p>Loading...</p>';
+
     const data = await fetchData();
 
-    if (!data) {
-        displayResults(null, "Error fetching data. Please try again.");
-        return;
-    }
+    if (!data) return; // Error already handled in fetchData
 
+    // Filter results based on search term
     const results = data.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
     displayResults(results);
 }
@@ -49,23 +53,24 @@ function displayResults(results, errorMessage = null) {
         results.forEach(row => {
             const card = document.createElement('div');
             card.classList.add('result-card');
-            
+
             selectedColumns.forEach((colIndex, i) => {
                 const label = document.createElement('p');
                 label.classList.add('result-label');
-                label.textContent = `${columnLabels[i]}: `;
+                label.innerHTML = `${columnLabels[i]}: `;
 
                 const value = document.createElement('span');
                 value.classList.add('result-value');
 
-                // Cek apakah ini kolom 22 dan jika ada URL
+                // Check if this is column 22 and if there is a URL
                 if (colIndex === 22) { 
                     const link = row[colIndex] || "";
                     if (isValidURL(link)) {
                         const anchor = document.createElement('a');
                         anchor.href = link;
                         anchor.target = '_blank';
-                        anchor.textContent = "Klik di sini"; // Tautan bisa diklik
+                        anchor.textContent = "Klik di sini"; // Clickable link
+                        anchor.setAttribute('aria-label', `Link to ${columnLabels[i]}`);
                         value.appendChild(anchor);
                     } else {
                         value.textContent = "Tidak ada link yang valid";
@@ -77,7 +82,7 @@ function displayResults(results, errorMessage = null) {
                 label.appendChild(value);
                 card.appendChild(label);
             });
-            
+
             resultsDiv.appendChild(card);
         });
     } else {
@@ -85,7 +90,7 @@ function displayResults(results, errorMessage = null) {
     }
 }
 
-// Fungsi untuk validasi apakah teks adalah URL
+// Function to validate if a string is a URL
 function isValidURL(string) {
     try {
         new URL(string);
