@@ -36,30 +36,30 @@ function displayResults(results, errorMessage = null) {
         return;
     }
 
-    if (results.length > 0) {
-        const table = document.createElement('table');
-        
-        // Header table
-        const headerRow = document.createElement('tr');
-        results[0].forEach((_, index) => {
-            const th = document.createElement('th');
-            th.textContent = `Kolom ${index + 1}`; // Nama kolom contoh, sesuaikan jika Anda tahu kolomnya
-            headerRow.appendChild(th);
-        });
-        table.appendChild(headerRow);
+    // Indeks kolom yang ingin ditampilkan, misal kolom "Keterangan" (index 1) dan kolom "Harga" (index 3)
+    const selectedColumns = [1, 3]; 
+    const columnLabels = ["Keterangan", "Harga"]; // Label kolom sesuai urutan di selectedColumns
 
-        // Isi tabel
+    if (results.length > 0) {
         results.forEach(row => {
-            const tr = document.createElement('tr');
-            row.forEach(cell => {
-                const td = document.createElement('td');
-                td.textContent = cell;
-                tr.appendChild(td);
+            const card = document.createElement('div');
+            card.classList.add('result-card');
+            
+            selectedColumns.forEach((colIndex, i) => {
+                const label = document.createElement('p');
+                label.classList.add('result-label');
+                label.textContent = `${columnLabels[i]}: `;
+                
+                const value = document.createElement('span');
+                value.classList.add('result-value');
+                value.textContent = row[colIndex] || "Tidak ada data";
+                
+                label.appendChild(value);
+                card.appendChild(label);
             });
-            table.appendChild(tr);
+            
+            resultsDiv.appendChild(card);
         });
-        
-        resultsDiv.appendChild(table);
     } else {
         resultsDiv.innerHTML = '<p>No results found.</p>';
     }
