@@ -48,9 +48,8 @@ function displayResults(results, errorMessage = null) {
         return;
     }
 
-    // Indeks kolom yang ingin ditampilkan, misal kolom "Keterangan" (index 1) dan kolom "Harga" (index 3)
-    const selectedColumns = [6, 7, 11, 21, 12, 8, 19, 13, 17, 18, 22]; 
-    const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"]; // Label kolom sesuai urutan di selectedColumns
+    const selectedColumns = [6, 7, 11, 21, 12, 8, 19, 13, 17, 18, 22];
+    const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"];
 
     if (results && results.length > 0) {
         results.forEach(row => {
@@ -65,11 +64,11 @@ function displayResults(results, errorMessage = null) {
                 const value = document.createElement('span');
                 value.classList.add('result-value');
 
-                // Jika cell adalah link, buat elemen 'a' agar bisa diklik
-                if (isValidURL(row[colIndex])) {
+                // Cek apakah kolom 22 adalah link
+                if (colIndex === 22 - 1 && isValidURL(row[colIndex])) { 
                     const link = document.createElement('a');
                     link.href = row[colIndex];
-                    link.target = '_blank'; // Buka link di tab baru
+                    link.target = '_blank';
                     link.textContent = "Klik di sini"; // atau row[colIndex] jika ingin menampilkan URL-nya
                     value.appendChild(link);
                 } else {
@@ -83,11 +82,10 @@ function displayResults(results, errorMessage = null) {
             resultsDiv.appendChild(card);
         });
     } else {
-        resultsDiv.innerHTML = '<p>No results found.</p>';
+        resultsDiv.innerHTML = '<p>Tidak ada hasil yang ditemukan.</p>';
     }
 }
 
-// Fungsi untuk validasi apakah teks adalah URL
 function isValidURL(string) {
     try {
         new URL(string);
