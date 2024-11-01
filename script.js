@@ -52,7 +52,7 @@ function displayResults(results, errorMessage = null) {
     const selectedColumns = [6, 7, 11, 21, 12, 8, 19, 13, 17, 18, 22]; 
     const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"]; // Label kolom sesuai urutan di selectedColumns
 
-    if (results.length > 0) {
+    if (results && results.length > 0) {
         results.forEach(row => {
             const card = document.createElement('div');
             card.classList.add('result-card');
@@ -61,11 +61,21 @@ function displayResults(results, errorMessage = null) {
                 const label = document.createElement('p');
                 label.classList.add('result-label');
                 label.textContent = `${columnLabels[i]}: `;
-                
+
                 const value = document.createElement('span');
                 value.classList.add('result-value');
-                value.textContent = row[colIndex] || "Tidak ada data";
-                
+
+                // Jika cell adalah link, buat elemen 'a' agar bisa diklik
+                if (isValidURL(row[colIndex])) {
+                    const link = document.createElement('a');
+                    link.href = row[colIndex];
+                    link.target = '_blank'; // Buka link di tab baru
+                    link.textContent = "Klik di sini"; // atau row[colIndex] jika ingin menampilkan URL-nya
+                    value.appendChild(link);
+                } else {
+                    value.textContent = row[colIndex] || "Tidak ada data";
+                }
+
                 label.appendChild(value);
                 card.appendChild(label);
             });
@@ -74,5 +84,15 @@ function displayResults(results, errorMessage = null) {
         });
     } else {
         resultsDiv.innerHTML = '<p>No results found.</p>';
+    }
+}
+
+// Fungsi untuk validasi apakah teks adalah URL
+function isValidURL(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;  
     }
 }
