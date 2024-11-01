@@ -51,11 +51,11 @@ function displayResults(results, errorMessage = null) {
 
     if (results && results.length > 0) {
         const rowDiv = document.createElement('div');
-        rowDiv.classList.add('row', 'g-2'); // Bootstrap row with gap between columns
+        rowDiv.classList.add('row', 'g-3'); // Bootstrap row with gap between columns
 
         results.forEach(row => {
             const colDiv = document.createElement('div');
-            colDiv.classList.add('col-12', 'col-md-6', 'col-lg-2'); // Full width on mobile, 6 columns on medium screens, 3 columns on large
+            colDiv.classList.add('col-12', 'col-md-6', 'col-lg-4'); // Full width on mobile, 2 columns on medium screens, 3 columns on large
 
             const card = document.createElement('div');
             card.classList.add('result-card', 'card', 'h-100', 'p-3', 'shadow-sm'); // Bootstrap card with full height and padding
@@ -95,7 +95,6 @@ function displayResults(results, errorMessage = null) {
         resultsDiv.innerHTML = '<div class="alert alert-warning" role="alert">Tidak ada hasil yang ditemukan.</div>';
     }
 }
-
 
 // Function to validate if a string is a URL
 function isValidURL(string) {
