@@ -37,8 +37,8 @@ function displayResults(results, errorMessage = null) {
     }
 
     // Indeks kolom yang ingin ditampilkan, misal kolom "Keterangan" (index 1) dan kolom "Harga" (index 3)
-    const selectedColumns = [1, 3]; 
-    const columnLabels = ["Keterangan", "Harga"]; // Label kolom sesuai urutan di selectedColumns
+    const selectedColumns = [6, 7, 11, 21, 12, 8, 19, 13, 17, 18, 22]; 
+    const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"]; // Label kolom sesuai urutan di selectedColumns
 
     if (results.length > 0) {
         results.forEach(row => {
