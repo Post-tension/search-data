@@ -96,6 +96,7 @@ function displayResults(results, errorMessage = null) {
     }
 }
 
+
 // Function to validate if a string is a URL
 function isValidURL(string) {
     try {
