@@ -4,9 +4,13 @@ const range = 'Sheet1!A1:Y135';
 
 async function fetchData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.values;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.values;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
 }
 
 async function searchData() {
@@ -28,17 +32,7 @@ async function searchData() {
     const results = data.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
     displayResults(results);
 }
-async function fetchData() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log("Data fetched:", data);
-        return data.values;
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    }
-}
+
 function displayResults(results, errorMessage = null) {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
@@ -64,13 +58,18 @@ function displayResults(results, errorMessage = null) {
                 const value = document.createElement('span');
                 value.classList.add('result-value');
 
-                // Cek apakah kolom 22 adalah link
-                if (colIndex === 22 - 1 && isValidURL(row[colIndex])) { 
-                    const link = document.createElement('a');
-                    link.href = row[colIndex];
-                    link.target = '_blank';
-                    link.textContent = "Klik di sini"; // atau row[colIndex] jika ingin menampilkan URL-nya
-                    value.appendChild(link);
+                // Cek apakah ini kolom 22 dan jika ada URL
+                if (colIndex === 22) { 
+                    const link = row[colIndex] || "";
+                    if (isValidURL(link)) {
+                        const anchor = document.createElement('a');
+                        anchor.href = link;
+                        anchor.target = '_blank';
+                        anchor.textContent = "Klik di sini"; // Tautan bisa diklik
+                        value.appendChild(anchor);
+                    } else {
+                        value.textContent = "Tidak ada link yang valid";
+                    }
                 } else {
                     value.textContent = row[colIndex] || "Tidak ada data";
                 }
@@ -86,6 +85,7 @@ function displayResults(results, errorMessage = null) {
     }
 }
 
+// Fungsi untuk validasi apakah teks adalah URL
 function isValidURL(string) {
     try {
         new URL(string);
