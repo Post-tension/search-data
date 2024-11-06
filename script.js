@@ -1,6 +1,6 @@
 const apiKey = 'AIzaSyAaoonqQDk_uxT9gIaH0ctGzcVvwcdtSa0';
 const spreadsheetId = '1O29p24mJmX-fvEtLw3Ia1WSmh-_nVS_AdOk8Ap6hoq0';
-const range = 'Sheet1!A1:O267';
+const range = 'Sheet1!A1:O275';
 
 document.getElementById('search-input').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
