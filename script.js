@@ -1,6 +1,13 @@
 const apiKey = 'AIzaSyAaoonqQDk_uxT9gIaH0ctGzcVvwcdtSa0';
 const spreadsheetId = '1O29p24mJmX-fvEtLw3Ia1WSmh-_nVS_AdOk8Ap6hoq0';
-const range = 'Sheet1!A1:Y135';
+const range = 'Sheet1!A1:O267';
+
+document.getElementById('search-input').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default form submission
+        searchData(); // Trigger the search
+    }
+});
 
 async function fetchData() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
@@ -18,17 +25,26 @@ async function fetchData() {
 async function searchData() {
     const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
 
+    // Clear previous error messages
+    const errorMessageElement = document.getElementById('error-message');
+    errorMessageElement.textContent = '';
+
     // Check if search term is empty
     if (!searchTerm) {
-        displayResults(null, "Error: Kata kunci pencarian harus diisi.");
+        errorMessageElement.textContent = "Error: Kata kunci pencarian harus diisi.";
+        document.getElementById('results-container').style.display = 'none'; // Hide results container
         return;
     }
 
     // Show loading indicator
     const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = '<p>Loading...</p>';
+    const loadingMessage = document.getElementById('loading-overlay');
+    resultsDiv.innerHTML = ''; // Clear previous results
+    loadingMessage.style.display = 'flex'; // Display loading message
+    document.getElementById('results-container').style.display = 'block'; // Show results container
 
     const data = await fetchData();
+    loadingMessage.style.display = 'none'; // Hide loading message
 
     if (!data) return; // Error already handled in fetchData
 
@@ -36,54 +52,91 @@ async function searchData() {
     const results = data.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
     displayResults(results);
 }
+function getRandomColorClass() {
+    const colors = [
+        'card-blue', 'card-green', 'card-red', 
+        'card-orange', 'card-purple', 'card-teal'
+    ];
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex]; // Return a random color class
+}
 
 function displayResults(results, errorMessage = null) {
     const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = '';
+    resultsDiv.innerHTML = ''; // Clear previous results
 
     if (errorMessage) {
         resultsDiv.innerHTML = `<div class="alert alert-danger" role="alert">${errorMessage}</div>`;
+        resultsDiv.style.display = 'block'; // Show error message
         return;
     }
 
-    const selectedColumns = [6, 7, 11, 21, 12, 8, 19, 13, 17, 18, 22];
+    const selectedColumns = [2, 4, 6, 13, 7, 5, 11, 8, 9, 10, 14];
     const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"];
 
-    if (results && results.length > 0) {
-        const rowDiv = document.createElement('div');
-        rowDiv.classList.add('row', 'g-3'); // Bootstrap row with gap between columns
+    const rowDiv = document.createElement('div');
+    
+    // Adjust classes based on the number of results
+    if (results.length === 1) {
+        rowDiv.classList.add('row'); // Just one result
+    } else if (results.length === 2) {
+        rowDiv.classList.add('row'); // Two results
+    } else {
+        rowDiv.classList.add('row', 'g-3'); // More than two results with gaps
+    }
 
-        results.forEach(row => {
+    if (results && results.length > 0) {
+        results.forEach((row) => {
             const colDiv = document.createElement('div');
-            colDiv.classList.add('col-12', 'col-md-6', 'col-lg-4'); // Full width on mobile, 2 columns on medium screens, 3 columns on large
+            
+            // Set column classes based on the number of results
+            if (results.length === 1) {
+                colDiv.classList.add('col-12'); // Full width for a single result
+            } else if (results.length === 2) {
+                colDiv.classList.add('col-6'); // Half width for two results
+            } else {
+                colDiv.classList.add('col-md-6', 'col-lg-4'); // Responsive columns for multiple results
+            }
 
             const card = document.createElement('div');
             card.classList.add('result-card', 'card', 'h-100', 'p-3', 'shadow-sm'); // Bootstrap card with full height and padding
+            card.classList.add(getRandomColorClass()); // Add random background color
+            
 
-            selectedColumns.forEach((colIndex, i) => {
-                const rowContent = document.createElement('p');
-                rowContent.innerHTML = `<strong>${columnLabels[i]}:</strong> `;
+            selectedColumns.forEach((colIndex, index) => {
+                const cellData = row[colIndex];
 
-                const value = document.createElement('span');
+                // Only render if cellData has a value
+                if (cellData && cellData.trim() !== "") { // Check if data exists and is not just whitespace
+                    const rowContent = document.createElement('p');
+                    rowContent.classList.add('card-text');
+                    
+                    // Check if the column is the link column (22nd column)
+                    if (colIndex === 14) {
+                        // Only show "Link Sertifikat" if there is data for it
+                        rowContent.innerHTML = `<strong>${columnLabels[index]}:</strong> <a href="${cellData}" target="_blank">Klik disini</a>`;
+                    } else if (index === 9) { // Index for "Status"
+                        const status = cellData;
+                        let statusClass = '';
+                        let statusIcon = '';
 
-                if (colIndex === 22) { // Link column
-                    const link = row[colIndex] || "";
-                    if (isValidURL(link)) {
-                        const anchor = document.createElement('a');
-                        anchor.href = link;
-                        anchor.target = '_blank';
-                        anchor.textContent = "Klik di sini";
-                        anchor.setAttribute('aria-label', `Link to ${columnLabels[i]}`);
-                        value.appendChild(anchor);
+                        // Set different styles based on status
+                        if (status.toLowerCase() === 'expired') {
+                            statusClass = 'text-danger';
+                            statusIcon = 'fas fa-exclamation-circle'; // Red icon for expired
+                        } else if (status.toLowerCase() === 'ok') {
+                            statusClass = 'text-success';
+                            statusIcon = 'fas fa-check-circle'; // Green icon for OK
+                        } else {
+                            statusClass = 'text-secondary';
+                            statusIcon = 'fas fa-question-circle'; // Grey icon for unknown
+                        }
+                        rowContent.innerHTML = `<strong>${columnLabels[index]}:</strong> <i class="${statusIcon} ${statusClass}"></i> ${status}`;
                     } else {
-                        value.textContent = "Tidak ada link yang valid";
+                        rowContent.innerHTML = `<strong>${columnLabels[index]}:</strong> ${cellData}`;
                     }
-                } else {
-                    value.textContent = row[colIndex] || "Tidak ada data";
+                    card.appendChild(rowContent);
                 }
-
-                rowContent.appendChild(value);
-                card.appendChild(rowContent);
             });
 
             colDiv.appendChild(card);
@@ -92,9 +145,12 @@ function displayResults(results, errorMessage = null) {
 
         resultsDiv.appendChild(rowDiv);
     } else {
-        resultsDiv.innerHTML = '<div class="alert alert-warning" role="alert">Tidak ada hasil yang ditemukan.</div>';
+        resultsDiv.innerHTML = `<div class="alert alert-info" role="alert">Tidak ada hasil yang ditemukan untuk "${document.getElementById('search-input').value}".</div>`;
     }
+
+    resultsDiv.style.display = 'block'; // Show results
 }
+
 
 
 // Function to validate if a string is a URL
@@ -106,3 +162,9 @@ function isValidURL(string) {
         return false;  
     }
 }
+
+// Event listener to hide results on initial load
+document.addEventListener("DOMContentLoaded", function () {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.style.display = 'none'; // Hide results container by default
+});
