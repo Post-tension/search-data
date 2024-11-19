@@ -124,7 +124,7 @@ function displayResults(results, errorMessage = null) {
                         if (status.toLowerCase() === 'expired') {
                             statusClass = 'text-danger';
                             statusIcon = 'fas fa-exclamation-circle'; // Red icon for expired
-                        } else if (status.toLowerCase() === 'Aktif') {
+                        } else if (status.toLowerCase() === 'aktif') {
                             statusClass = 'text-success';
                             statusIcon = 'fas fa-check-circle'; // Green icon for OK
                         } else {
