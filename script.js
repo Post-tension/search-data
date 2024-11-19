@@ -115,7 +115,7 @@ function displayResults(results, errorMessage = null) {
                     if (colIndex === 15) {
                         // Only show "Link Sertifikat" if there is data for it
                         rowContent.innerHTML = `<strong>${columnLabels[index]}:</strong> <a href="${cellData}" target="_blank">Klik disini</a>`;
-                    } else if (index === 9) { // Index for "Status"
+                    } else if (index === 10) { // Index for "Status"
                         const status = cellData;
                         let statusClass = '';
                         let statusIcon = '';
