@@ -1,6 +1,6 @@
 const apiKey = 'AIzaSyAaoonqQDk_uxT9gIaH0ctGzcVvwcdtSa0';
 const spreadsheetId = '1O29p24mJmX-fvEtLw3Ia1WSmh-_nVS_AdOk8Ap6hoq0';
-const range = 'Sheet1!A1:R282';
+const range = 'Sheet1!A1:Q267';
 
 document.getElementById('search-input').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
@@ -116,7 +116,7 @@ function displayResults(results, errorMessage = null) {
                         // Only show "Link Sertifikat" if there is data for it
                         rowContent.innerHTML = `<strong>${columnLabels[index]}:</strong> <a href="${cellData}" target="_blank">Klik disini</a>`;
                     } else if (index === 10) { // Index for "Status"
-                       const status = cellData;
+                        const status = cellData;
                         let statusClass = '';
                         let statusIcon = '';
 
@@ -150,7 +150,6 @@ function displayResults(results, errorMessage = null) {
 
     resultsDiv.style.display = 'block'; // Show results
 }
-
 
 
 
