@@ -116,7 +116,7 @@ function displayResults(results, errorMessage = null) {
                         // Only show "Link Sertifikat" if there is data for it
                         rowContent.innerHTML = `<strong>${columnLabels[index]}:</strong> <a href="${cellData}" target="_blank">Klik disini</a>`;
                     } else if (index === 10) { // Index for "Status"
-                        const status = cellData;
+                       const status = cellData;
                         let statusClass = '';
                         let statusIcon = '';
 
@@ -150,6 +150,7 @@ function displayResults(results, errorMessage = null) {
 
     resultsDiv.style.display = 'block'; // Show results
 }
+
 
 
 
