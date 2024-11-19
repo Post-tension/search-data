@@ -1,6 +1,6 @@
 const apiKey = 'AIzaSyAaoonqQDk_uxT9gIaH0ctGzcVvwcdtSa0';
 const spreadsheetId = '1O29p24mJmX-fvEtLw3Ia1WSmh-_nVS_AdOk8Ap6hoq0';
-const range = 'Sheet1!A1:Q282';
+const range = 'Sheet1!A1:R282';
 
 document.getElementById('search-input').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
@@ -71,8 +71,8 @@ function displayResults(results, errorMessage = null) {
         return;
     }
 
-    const selectedColumns = [2, 4, 6, 13, 7, 5, 11, 8, 9, 10, 14];
-    const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"];
+    const selectedColumns = [2, 4, 6, 13, 14, 7, 5, 11, 9, 10, 14];
+    const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "NKP Lama", "NKP baru", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Expired", "Status", "Link Sertifikat"];
 
     const rowDiv = document.createElement('div');
     
@@ -124,7 +124,7 @@ function displayResults(results, errorMessage = null) {
                         if (status.toLowerCase() === 'expired') {
                             statusClass = 'text-danger';
                             statusIcon = 'fas fa-exclamation-circle'; // Red icon for expired
-                        } else if (status.toLowerCase() === 'ok') {
+                        } else if (status.toLowerCase() === 'Aktif') {
                             statusClass = 'text-success';
                             statusIcon = 'fas fa-check-circle'; // Green icon for OK
                         } else {
