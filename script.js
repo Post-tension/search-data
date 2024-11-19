@@ -71,7 +71,7 @@ function displayResults(results, errorMessage = null) {
         return;
     }
 
-    const selectedColumns = [2, 4, 6, 13, 14, 7, 5, 11, 9, 10, 14];
+    const selectedColumns = [2, 4, 6, 13, 14, 7, 5, 11, 9, 10, 15];
     const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "NKP Lama", "NKP baru", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Expired", "Status", "Link Sertifikat"];
 
     const rowDiv = document.createElement('div');
@@ -112,7 +112,7 @@ function displayResults(results, errorMessage = null) {
                     rowContent.classList.add('card-text');
                     
                     // Check if the column is the link column (22nd column)
-                    if (colIndex === 14) {
+                    if (colIndex === 15) {
                         // Only show "Link Sertifikat" if there is data for it
                         rowContent.innerHTML = `<strong>${columnLabels[index]}:</strong> <a href="${cellData}" target="_blank">Klik disini</a>`;
                     } else if (index === 9) { // Index for "Status"
