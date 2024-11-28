@@ -24,7 +24,7 @@ async function fetchData() {
 
 async function searchData() {
     const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
-
+    console.log('Searching for:', searchTerm); // Log untuk memverifikasi pencarian
     // Clear previous error messages
     const errorMessageElement = document.getElementById('error-message');
     errorMessageElement.textContent = '';
@@ -50,6 +50,7 @@ async function searchData() {
 
     // Filter results based on search term
     const results = data.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
+    console.log('Filtered results:', results); // Log untuk memastikan hasil filter
     displayResults(results);
 }
 function getRandomColorClass() {
@@ -71,8 +72,8 @@ function displayResults(results, errorMessage = null) {
         return;
     }
 
-    const selectedColumns = [2, 4, 6, 13, 14, 7, 5, 11, 9, 10, 15];
-    const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "NKP Lama", "NKP baru", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Expired", "Status", "Link Sertifikat"];
+    const selectedColumns = [2, 4, 6, 13, 7, 5, 11, 8, 9, 10, 14];
+    const columnLabels = ["Nama Alat", "Tipe Jack", "Merk", "No NKP", "Nomor Seri", "No Manometer", "Lokasi Alat", "Tanggal Kalibrasi", "Tanggal Expired", "Status", "Link Sertifikat"];
 
     const rowDiv = document.createElement('div');
     
@@ -112,7 +113,7 @@ function displayResults(results, errorMessage = null) {
                     rowContent.classList.add('card-text');
                     
                     // Check if the column is the link column (22nd column)
-                    if (colIndex === 15) {
+                    if (colIndex === 14) {
                         // Only show "Link Sertifikat" if there is data for it
                         rowContent.innerHTML = `<strong>${columnLabels[index]}:</strong> <a href="${cellData}" target="_blank">Klik disini</a>`;
                     } else if (index === 9) { // Index for "Status"
@@ -167,4 +168,88 @@ function isValidURL(string) {
 document.addEventListener("DOMContentLoaded", function () {
     const resultsDiv = document.getElementById('results');
     resultsDiv.style.display = 'none'; // Hide results container by default
+});
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM Loaded, setting up template button listeners.");
+
+    // Attach listeners to all template buttons, including dropdown items
+    document.querySelectorAll('.template-button').forEach(button => {
+        console.log("Attaching listener to button:", button); // Log untuk memastikan tombol ditemukan
+        
+        button.addEventListener('click', function() {
+            const keyword = this.getAttribute('data-keyword');
+            console.log('Keyword clicked:', keyword); // Log keyword yang diambil
+            
+            // Set nilai input pencarian
+            document.getElementById('search-input').value = keyword;
+            searchData(); // Panggil fungsi pencarian
+        });
+    });
+
+    // Handle dropdown items specifically (e.g., "Manometer" dropdown)
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const keyword = this.getAttribute('data-keyword');
+            console.log('Dropdown item clicked:', keyword); // Log item yang di-click
+            
+            // Set nilai input pencarian
+            document.getElementById('search-input').value = keyword;
+            searchData(); // Panggil fungsi pencarian
+        });
+    });
+});
+
+// Function to fetch data from Google Sheets and populate the dropdown
+async function fetchAndPopulateDropdown() {
+    const data = await fetchData(); // Fetch data from the Google Sheets API
+    
+    console.log('Fetched data:', data); // Log the fetched data to verify it
+
+    if (!data) {
+        console.error("Error fetching data.");
+        return; // If there's an error fetching data, return early
+    }
+
+    // Define row ranges for the data you want to filter
+    const rowsToInclude = [
+        ...data.slice(2, 12), // Rows 3-12 (indices 2-11)
+        ...data.slice(13, 41), // Rows 14-41 (indices 13-40)
+        ...data.slice(43, 91), // Rows 14-41 (indices 13-40)
+        ...data.slice(13, 41), // Rows 14-41 (indices 13-40)
+        ...data.slice(93, 112), // Rows 14-41 (indices 13-40)
+        ...data.slice(114, 141), // Rows 14-41 (indices 13-40)
+        ...data.slice(143, 170), // Rows 14-41 (indices 13-40)
+        ...data.slice(172, 282) // Rows 14-41 (indices 13-40)
+
+    ];
+
+    // Extract unique, non-empty values from column 11 (index 10) in the specified rows
+    const dropdownValues = [...new Set(rowsToInclude.map(row => row[11]).filter(value => value && value.trim() !== ''))]; // Column 11 is index 10
+
+    const dropdown = document.getElementById('dropdown-menu'); // Assuming your dropdown has this id
+    dropdown.innerHTML = ''; // Clear any previous values
+
+    // Create and append a default 'Select' option
+    const defaultOption = document.createElement('option');
+    defaultOption.textContent = 'Pilih Lokasi Alat'; // Default text
+    dropdown.appendChild(defaultOption);
+
+    // Populate the dropdown with unique values
+    dropdownValues.forEach(value => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value; // Set both value and text to the extracted value
+        dropdown.appendChild(option);
+    });
+}
+
+// Call this function when the page loads
+document.addEventListener('DOMContentLoaded', function () {
+    fetchAndPopulateDropdown(); // Populate the dropdown with data from the spreadsheet
+});
+document.getElementById('dropdown-menu').addEventListener('change', function() {
+    const selectedValue = this.value;
+    console.log('Selected category:', selectedValue); // You can use this value for filtering search
+    document.getElementById('search-input').value = selectedValue; // Set the search input to the selected value
+    searchData(); // Trigger the search
 });
