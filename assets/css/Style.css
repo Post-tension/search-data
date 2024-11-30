@@ -1,6 +1,6 @@
 
 body {
-    background-image: url('background.jpg');
+    background-image: url('assets/img/background.jpg');
     background-size: cover;
     background-attachment: fixed; /* Fix the background image */
     min-height: 100vh;
