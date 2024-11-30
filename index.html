@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Data Alat Stressing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/Style.css">
+</head>
+<body>
+    <!-- Navbar Atas (Desktop) -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-desktop">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Workshop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-search"></i> Search Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="database.html"><i class="fas fa-database"></i> Database Alat</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Container 1: Search Engine -->
+     <div class="wrapper d-flex flex-column align-items-center">
+    <div class="main-container">
+        <img src="assets/img/app.png" alt="Logo" class="logo"> <!-- Add your logo image here -->
+        <h1>Search Data Alat Stressing</h1>
+        <div id="search-templates" class="mb-3">
+            <!-- Aktif Button -->
+            <div class="btn-group m-1">
+                <button type="button" class="btn btn-success m-1 template-button dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                   All Jack Aktif
+                </button>
+                <ul class="dropdown-menu dropdown-success">
+                    <li><button class="dropdown-item " data-keyword="YDC1500B AKTIF">YDC1500B AKTIF</button></li>
+                    <li><button class="dropdown-item" data-keyword="YDC2500B AKTIF">YDC2500B AKTIF</button></li>
+                    <li><button class="dropdown-item" data-keyword="YDC3500B AKTIF">YDC3500B AKTIF</button></li>
+                    <li><button class="dropdown-item" data-keyword="YDC5000B AKTIF">YDC5000B AKTIF</button></li>
+                    <li><button class="dropdown-item" data-keyword="JKDINT500-12 AKTIF">JKDINT500-12 AKTIF</button></li>
+                    <li><button class="dropdown-item" data-keyword="YDQ260B AKTIF">YDQ260B AKTIF</button></li>
+                </ul>
+            </div>
+           
+        
+            <!-- Dropdown for Expired -->
+            <div class="btn-group m-1">
+                <button type="button" class="btn btn-danger m-1 template-button dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    All Jack Expired
+                </button>
+                <ul class="dropdown-menu dropdown-primary  ">
+                    <li><button class="dropdown-item " data-keyword="YDC1500B EXPIRED">YDC1500B EXPIRED</button></li>
+                    <li><button class="dropdown-item" data-keyword="YDC2500B EXPIRED">YDC2500B EXPIRED</button></li>
+                    <li><button class="dropdown-item" data-keyword="YDC3500B EXPIRED">YDC3500B EXPIRED</button></li>
+                    <li><button class="dropdown-item" data-keyword="YDC5000B EXPIRED">YDC5000B EXPIRED</button></li>
+                    <li><button class="dropdown-item" data-keyword="JKDINT500-12 EXPIRED">JKDINT500-12 EXPIRED</button></li>
+                    <li><button class="dropdown-item" data-keyword="YDQ260B EXPIRED">YDQ260B EXPIRED</button></li>
+                </ul>
+            </div>
+        
+            <!-- Manometer Dropdown -->
+            <div class="btn-group m-1">
+                <select id="dropdown-menu" class="form-select btn btn-warning" aria-label="Pilih Lokasi Alat">
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+        
+            <!-- Kalibrasi Button -->
+            
+        </div>
+        <div class="search-menu">
+            <div class="input-group">
+                <input type="text" id="search-input" class="form-control" placeholder="Search..." aria-label="Search term">
+                <button class="btn btn-primary" onclick="searchData()"><i class="fas fa-search"></i></button>
+            </div>
+            <p id="error-message"></p>
+            <p id="loading-message" style="display: none;"></p> <!-- Loading message -->
+        </div>
+    </div>
+    <!-- Container 2: Search Results -->
+    <div class="results-container" id="results-container" style="display: none;">
+        <div id="results" class="row"></div>
+    </div>
+
+    <div id="loading-overlay">
+        <div>
+            <div class="spinner"></div>
+            <div id="loading-text">Searching...</div>
+        </div>
+    </div>
+    <div class="mobile-navbar">
+         <a href="index.html" class="nav-link">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="database.html" class="nav-link">
+            <i class="fas fa-database"></i>
+            <span>Database</span>
+        </a>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Post Tension. All rights reserved.</p>
+    
+    </footer>
+</div>
+    <script src="script1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

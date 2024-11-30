@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Alat</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="assets/js/script2.js" defer></script>
+    <link rel="stylesheet" href="assets/css/Style.css">
+    
+</head>
+<body >
+   
+       <!-- Navbar Atas (Desktop) -->
+       <nav class="navbar navbar-expand-lg navbar-dark navbar-desktop">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Workshop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-search"></i> Search Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="database.html"><i class="fas fa-database"></i> Database Alat</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-center">
+            <img src="assets/img/app.png" alt="Logo" class="logo">
+        </div>
+        <h1 class="text-center mb-4">Database Alat Per Proyek</h1>
+
+        <!-- Form untuk memilih lokasi -->
+        <div class="search-menu">
+            <div class="input-group">       
+                    <select id="lokasi" class="form-select">
+                        <!-- Opsi lokasi akan diisi secara dinamis -->
+                    </select>
+                <button class="btn btn-primary" onclick="cariBarang()"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <!-- Tempat untuk menampilkan hasil pencarian -->
+        <div id="hasil" class="mt-4">
+            <!-- Hasil pencarian akan tampil di sini -->
+        </div>
+        
+    </div>
+   
+    <div class="mobile-navbar">
+        <a href="index.html" class="nav-link">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="database.html" class="nav-link">
+            <i class="fas fa-database"></i>
+            <span>Database</span>
+        </a>
+    </div>
+    <footer class="text-center py-3 mt-auto">
+        <p>&copy; 2024 Post Tension. All rights reserved.</p>
+    
+    </footer>
+  
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
